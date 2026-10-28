@@ -1,0 +1,41 @@
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.util.List;
+
+import za.ac.cput.dao.TicketDAO;
+import za.ac.cput.domain.ParkingTicket;
+import za.ac.cput.domain.Protocol;
+
+public class ParkingServer {
+
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+
+    private ServerSocket serverSocket;
+    private Socket client;
+
+    private TicketDAO dao;
+
+    // Create the server and wait for a client
+    public ParkingServer() {
+        try {
+            serverSocket = new ServerSocket(Protocol.PORT);
+
+            System.out.println("Server started. Waiting for client...");
+
+            client = serverSocket.accept();
+
+            System.out.println("Client connected!");
+
+            dao = new TicketDAO();
+
+        } catch (IOException e) {
+            System.out.println("Server error: " + e.getMessage());
+            closeConnection();
+        }
+    }
