@@ -1,0 +1,21 @@
+    /** C4 - Tell the server we are leaving (Protocol.EXIT) and close the streams and socket. */
+    public void disconnect() {
+        try {
+            // 1. Tell the server we are leaving
+            if (out != null) {
+                out.writeObject(Protocol.EXIT);
+                out.flush();
+            }
+        } catch (IOException e) {
+            System.out.println("Error sending EXIT protocol: " + e.getMessage());
+        } finally {
+            // 2. Cleanly close down the streams and socket in order
+            try {
+                if (in != null) in.close();
+                if (out != null) out.close();
+                if (socket != null && !socket.isClosed()) socket.close();
+            } catch (IOException e) {
+                System.out.println("Error closing network streams: " + e.getMessage());
+            }
+        }
+    }
