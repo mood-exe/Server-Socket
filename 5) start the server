@@ -1,0 +1,12 @@
+ public static void main(String[] args) {
+        ParkingServer server = new ParkingServer();
+
+        if (server.client != null && server.client.isConnected()) {
+            server.getStreams();
+
+            if (server.in != null && server.out != null) {
+                server.processClient();
+            }
+        }
+    }
+}
