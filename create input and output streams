@@ -1,0 +1,14 @@
+ public void getStreams() {
+        try {
+            out = new ObjectOutputStream(client.getOutputStream());
+            out.flush();
+
+            in = new ObjectInputStream(client.getInputStream());
+
+            System.out.println("Streams established.");
+
+        } catch (IOException e) {
+            System.out.println("Stream error: " + e.getMessage());
+            closeConnection();
+        }
+    }
