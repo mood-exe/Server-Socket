@@ -1,0 +1,26 @@
+  /** B3: Read every row of PARKING_TICKET (ordered by plate number) and return them as ParkingTicket objects. */
+    public List<ParkingTicket> getAllTickets() throws SQLException {
+        List<ParkingTicket> ticketList = new ArrayList<>();
+        String sql = "SELECT PLATE_NUMBER, DRIVER_NAME, HOURS_PARKED, AMOUNT_DUE FROM PARKING_TICKET ORDER BY PLATE_NUMBER";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                String plateNumber = rs.getString("PLATE_NUMBER");
+                String driverName = rs.getString("DRIVER_NAME");
+                int hoursParked = rs.getInt("HOURS_PARKED");
+                double amountDue = rs.getDouble("AMOUNT_DUE");
+                
+                // Create a new ParkingTicket object and populate it
+                // Note: If your ParkingTicket class doesn't have an all-arguments constructor,
+                // use setter methods instead (e.g., ticket.setPlateNumber(plateNumber);)
+                ParkingTicket ticket = new ParkingTicket(plateNumber, driverName, hoursParked, amountDue);
+                
+                ticketList.add(ticket);
+            }
+        }
+        
+        return ticketList;
+    }
+}
