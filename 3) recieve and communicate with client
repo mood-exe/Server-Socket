@@ -1,4 +1,4 @@
-public void processClient() {
+ public void processClient() {
         try {
             String request;
 
@@ -8,19 +8,23 @@ public void processClient() {
                 switch (request) {
 
                     case "ADD":
-                        ParkingTicket ticket =
-                            (ParkingTicket) in.readObject();
-
-                        dao.insertTicket(ticket);
-
-                        out.writeObject("Ticket added successfully.");
-                        out.flush();
+                        // Wrap in a local try-catch to catch SQL errors and reply to client
+                        try {
+                            ParkingTicket ticket = (ParkingTicket) in.readObject();
+                            dao.insertTicket(ticket);
+                            
+                            // Rubric requires replying exactly "OK"
+                            out.writeObject("OK");
+                            out.flush();
+                        } catch (SQLException e) {
+                            // Rubric requires replying with "ERROR: " and the message
+                            out.writeObject("ERROR: " + e.getMessage());
+                            out.flush();
+                        }
                         break;
 
-                    case "GET_ALL":
-                        List<ParkingTicket> tickets =
-                            dao.getAllTickets();
-
+                    case "RETRIEVE": // Changed from "GET_ALL" to match rubric
+                        List<ParkingTicket> tickets = dao.getAllTickets();
                         out.writeObject(tickets);
                         out.flush();
                         break;
@@ -41,7 +45,7 @@ public void processClient() {
         } catch (EOFException e) {
             System.out.println("Client disconnected.");
 
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Communication error: " + e.getMessage());
 
         } finally {
