@@ -1,0 +1,10 @@
+ /** C2 - Send the ADD command (Protocol.ADD) followed by the ticket to the server,
+     * then read and return the server's reply ("OK" or "ERROR: ..."). */
+    public String addTicket(ParkingTicket ticket) throws IOException, ClassNotFoundException {
+        out.writeObject(Protocol.ADD);
+        out.writeObject(ticket);
+        out.flush();
+        
+        // Read and return the server's response string
+        return (String) in.readObject();
+    }
