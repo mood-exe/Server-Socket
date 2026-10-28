@@ -1,0 +1,38 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.List;
+import za.ac.cput.domain.ParkingTicket;
+import za.ac.cput.domain.Protocol;
+
+/**
+ * STUDENT TASK (Part C) - all the networking code for the client goes in this class.
+ * The GUI calls the public methods below. Do not change the method signatures.
+ */
+public class ParkingClient {
+
+    private final String host;
+    private final int port;
+
+    // C1: declared the Socket and the object input/output streams here
+    private Socket socket;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+
+    public ParkingClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
+    /** C1 - Connect to the server and create the I/O streams. */
+    public void connect() throws IOException {
+        // Open the socket connection using the instance fields
+        socket = new Socket(host, port);
+        
+        // Initialize the output stream first and flush to prevent stream deadlocks
+        out = new ObjectOutputStream(socket.getOutputStream());
+        out.flush();
+        
+        in = new ObjectInputStream(socket.getInputStream());
+    }
