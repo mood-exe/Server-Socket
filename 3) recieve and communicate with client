@@ -1,0 +1,50 @@
+public void processClient() {
+        try {
+            String request;
+
+            do {
+                request = (String) in.readObject();
+
+                switch (request) {
+
+                    case "ADD":
+                        ParkingTicket ticket =
+                            (ParkingTicket) in.readObject();
+
+                        dao.insertTicket(ticket);
+
+                        out.writeObject("Ticket added successfully.");
+                        out.flush();
+                        break;
+
+                    case "GET_ALL":
+                        List<ParkingTicket> tickets =
+                            dao.getAllTickets();
+
+                        out.writeObject(tickets);
+                        out.flush();
+                        break;
+
+                    case "EXIT":
+                        out.writeObject("Goodbye!");
+                        out.flush();
+                        break;
+
+                    default:
+                        out.writeObject("Unknown request.");
+                        out.flush();
+                        break;
+                }
+
+            } while (!request.equals("EXIT"));
+
+        } catch (EOFException e) {
+            System.out.println("Client disconnected.");
+
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            System.out.println("Communication error: " + e.getMessage());
+
+        } finally {
+            closeConnection();
+        }
+    }
