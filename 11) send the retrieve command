@@ -1,0 +1,32 @@
+ /** C3 - Send the RETRIEVE command (Protocol.RETRIEVE), then read and return the list of tickets
+     * that the server sends back. */
+    @SuppressWarnings("unchecked")
+    public List<ParkingTicket> retrieveTickets() throws IOException, ClassNotFoundException {
+        out.writeObject(Protocol.RETRIEVE);
+        out.flush();
+        
+        // Read and return the typed list directly to the calling GUI layer
+        return (List<ParkingTicket>) in.readObject();
+    }
+
+    /** C4 - Tell the server we are leaving (Protocol.EXIT) and close the streams and socket. */
+    public void disconnect() {
+        try {
+            if (out != null) {
+                out.writeObject(Protocol.EXIT);
+                out.flush();
+            }
+        } catch (IOException e) {
+            System.out.println("Error sending EXIT protocol: " + e.getMessage());
+        } finally {
+            // Safely tear down all networking resources in order
+            try {
+                if (in != null) in.close();
+                if (out != null) out.close();
+                if (socket != null && !socket.isClosed()) socket.close();
+            } catch (IOException e) {
+                System.out.println("Error closing network streams: " + e.getMessage());
+            }
+        }
+    }
+}
