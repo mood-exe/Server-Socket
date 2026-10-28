@@ -1,0 +1,33 @@
+    private void closeConnection() {
+        try {
+            if (in != null) {
+                in.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing input stream.");
+        }
+
+        try {
+            if (out != null) {
+                out.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing output stream.");
+        }
+
+        try {
+            if (client != null && !client.isClosed()) {
+                client.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing client socket.");
+        }
+
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing server socket.");
+        }
+    }
