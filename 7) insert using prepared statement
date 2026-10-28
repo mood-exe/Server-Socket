@@ -1,0 +1,14 @@
+ /** B2: Insert one ticket into PARKING_TICKET using a PreparedStatement. */
+    public void insertTicket(ParkingTicket ticket) throws SQLException {
+        String sql = "INSERT INTO PARKING_TICKET (PLATE_NUMBER, DRIVER_NAME, HOURS_PARKED, AMOUNT_DUE) VALUES (?, ?, ?, ?)";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // Bind parameters to prevent SQL injection and avoid string joining
+            pstmt.setString(1, ticket.getPlateNumber());
+            pstmt.setString(2, ticket.getDriverName());
+            pstmt.setInt(3, ticket.getHoursParked());
+            pstmt.setDouble(4, ticket.getAmountDue());
+            
+            pstmt.executeUpdate();
+        }
+    }
